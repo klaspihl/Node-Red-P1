@@ -1,0 +1,219 @@
+[
+    {
+        "id": "dad4465070f351d8",
+        "type": "tab",
+        "label": "P1 endpoint",
+        "disabled": false,
+        "info": "Working flow to read P1 port\r\n2023-06-20",
+        "env": []
+    },
+    {
+        "id": "136eed683eee8946",
+        "type": "debug",
+        "z": "dad4465070f351d8",
+        "d": true,
+        "name": "debug",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 750,
+        "y": 400,
+        "wires": []
+    },
+    {
+        "id": "68a59d7671590b82",
+        "type": "serial in",
+        "z": "dad4465070f351d8",
+        "name": "P1",
+        "serial": "1e401fa16f7ce0b1",
+        "x": 70,
+        "y": 520,
+        "wires": [
+            [
+                "c6299780f3076d34"
+            ]
+        ]
+    },
+    {
+        "id": "17eabf387b8f43a6",
+        "type": "exec",
+        "z": "dad4465070f351d8",
+        "command": "pwsh -File /var/p1/convert-P1json.ps1",
+        "addpay": "payload",
+        "append": "",
+        "useSpawn": "false",
+        "timer": "20",
+        "winHide": false,
+        "oldrc": false,
+        "name": "Script parse output",
+        "x": 510,
+        "y": 520,
+        "wires": [
+            [
+                "4a8390836dfd1d2a",
+                "136eed683eee8946"
+            ],
+            [
+                "136eed683eee8946"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "c6299780f3076d34",
+        "type": "template",
+        "z": "dad4465070f351d8",
+        "name": "Format string output",
+        "field": "payload",
+        "fieldType": "msg",
+        "format": "handlebars",
+        "syntax": "mustache",
+        "template": "\"{{payload}}\"",
+        "output": "str",
+        "x": 280,
+        "y": 520,
+        "wires": [
+            [
+                "17eabf387b8f43a6"
+            ]
+        ]
+    },
+    {
+        "id": "4a8390836dfd1d2a",
+        "type": "json",
+        "z": "dad4465070f351d8",
+        "name": "Create object data",
+        "property": "payload",
+        "action": "",
+        "pretty": false,
+        "x": 750,
+        "y": 520,
+        "wires": [
+            [
+                "db6c43a71484d9fb"
+            ]
+        ]
+    },
+    {
+        "id": "3abff207af3ac848",
+        "type": "http in",
+        "z": "dad4465070f351d8",
+        "name": "Endpoint p1",
+        "url": "/p1",
+        "method": "get",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 90,
+        "y": 400,
+        "wires": [
+            [
+                "f3c801b2595b0363"
+            ]
+        ]
+    },
+    {
+        "id": "7786b0232ef37210",
+        "type": "http response",
+        "z": "dad4465070f351d8",
+        "name": "",
+        "x": 490,
+        "y": 400,
+        "wires": []
+    },
+    {
+        "id": "db6c43a71484d9fb",
+        "type": "change",
+        "z": "dad4465070f351d8",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "p1data",
+                "pt": "flow",
+                "to": "payload",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 980,
+        "y": 520,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "f3c801b2595b0363",
+        "type": "change",
+        "z": "dad4465070f351d8",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "p1data",
+                "tot": "flow"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 280,
+        "y": 400,
+        "wires": [
+            [
+                "7786b0232ef37210"
+            ]
+        ]
+    },
+    {
+        "id": "aad6b847f6749a57",
+        "type": "comment",
+        "z": "dad4465070f351d8",
+        "name": "API endpoint",
+        "info": "",
+        "x": 90,
+        "y": 340,
+        "wires": []
+    },
+    {
+        "id": "77c1e2f57b91bcfb",
+        "type": "comment",
+        "z": "dad4465070f351d8",
+        "name": "Serial data to object",
+        "info": "",
+        "x": 110,
+        "y": 460,
+        "wires": []
+    },
+    {
+        "id": "1e401fa16f7ce0b1",
+        "type": "serial-port",
+        "serialport": "/dev/ttyUSB0",
+        "serialbaud": "115200",
+        "databits": "8",
+        "parity": "none",
+        "stopbits": "1",
+        "waitfor": "",
+        "dtr": "none",
+        "rts": "none",
+        "cts": "none",
+        "dsr": "none",
+        "newline": "1000",
+        "bin": "false",
+        "out": "interbyte",
+        "addchar": "",
+        "responsetimeout": "10000"
+    }
+]
